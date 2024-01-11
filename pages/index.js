@@ -1,9 +1,10 @@
 import Head from "next/head";
 import { useState } from "react";
-import { Button } from 'antd';
+import { Affix, Button } from 'antd';
 import styles from "./index.module.css";
 
 export default function Home() {
+  const [top, setTop] = useState(100);
   const [textInput, setTextInput] = useState("");
   const [result, setResult] = useState();
 
@@ -38,6 +39,11 @@ export default function Home() {
         <title>OpenAI Quickstart</title>
         <link rel="icon" href="/dog.png" />
       </Head>
+      <Affix offsetTop={top} style={{ position: 'absolute', right: 100 }}>
+        <Button type="primary" >
+          配置
+        </Button>
+      </Affix>
       <main className={styles.main}>
         <img src="/dog.png" className={styles.icon} />
         <h3>文本转语音</h3>
