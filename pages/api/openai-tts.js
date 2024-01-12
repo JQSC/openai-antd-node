@@ -2,9 +2,10 @@ import OpenAI from "openai";
 import tunnel from 'tunnel'
 import fs from 'fs'
 import path from 'path'
+import moment from 'moment'
 
 const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY,
+  apiKey: '',//process.env.OPENAI_API_KEY,
   timeout: 12000,
   httpAgent: tunnel.httpsOverHttp({
     proxy: {
@@ -14,7 +15,8 @@ const openai = new OpenAI({
   })
 });
 
-async function writeAudioFile(fileName, buffer) {
+async function writeAudioFile(buffer) {
+  const fileName = moment().format('YYYY-MM-DD#HHmmss')
   const speechFile = path.resolve(`./public/audio/${fileName}.mp3`);
   return fs.promises.writeFile(speechFile, buffer);
 }
@@ -37,7 +39,7 @@ export default async function (req, res) {
       input: text,
     });
     const buffer = Buffer.from(await mp3.arrayBuffer());
-    await writeAudioFile(new Date().getTime(), buffer)
+    await writeAudioFile(buffer)
     res.status(200).json({ result: 'ok' });
   } catch (error) {
     // Consider adjusting the error handling logic for your use case
